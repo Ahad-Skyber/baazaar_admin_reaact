@@ -19,20 +19,21 @@ let history = useHistory();
 const search = window.location.search;
   const params = new URLSearchParams(search);
   const user_id = params.get('user_id');
+  var u_ids=user_id
 
-  var u_ids = user_id.split('/')[0];
-  var sto_name = user_id.split('/')[1];
-
-const [store_name,setStore_Name]=useState([]);
+//var u_ids = user_id.split('/')[0];
+var sto_name = user_id.split('/')[1];
+const [store_name,setStore_Name]=useState(null);
 
 useEffect(()=>{
-    load_vndr_name();
+    //load_vndr_name();
+	load_Data();
 },[] );
 
 
-  const load_vndr_name=async()=>{
-  setStore_Name(sto_name)
-  }
+//   const load_vndr_name=async()=>{
+//   setStore_Name(sto_name)
+//   }
 
 const [order,setOrder]=useState([]);
 const [mgs,setMsg]=useState(null)
@@ -51,13 +52,33 @@ const onInputChange=e=>{
 setData({...use_data,[e.target.name]:e.target.value})
 };
 
+const load_Data= async()=>{
+    axios.post('http://localhost:8000/vendor/vendor_store_details_on_vendorid',{user_id:u_ids},{
+      headers: {
+         "Authorization":"Bearer "+ Cookies.get('token')   
+     }      
+       
+   } )
+     .then(result =>{
+     
+      if(result.status===200)
+      {           
+        setStore_Name(result.data.data[0].store_name)
+      }
+      else if(result.status===404)
+      {
+       setMsg(result.data.message)
+      }
 
-	
+    
+     } )
+     .catch(error =>{
+       console.log(error)
+   
+     } )
 
-              
-        
+  }
 		
-			
 			  
 	 const onSubmit =  e => {
 		e.preventDefault();

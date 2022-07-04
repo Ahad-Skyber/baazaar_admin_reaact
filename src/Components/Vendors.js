@@ -8,6 +8,8 @@ import Aside from './Aside';
 import Header from './Header';
 import Footer from './Footer';
 import Scrolltop from './Scrolltop';
+import DataTable from  "react-data-table-component";
+
 
 
 
@@ -18,14 +20,14 @@ const Vendors=() =>{
  //My Tempcode end
 
 const [vndrs,setVndrs]=useState([]);
+
+const [filt_vndrs,setFilt_Vndrs]=useState([]);
+
 const [mgs,setMsg]=useState(null)
 
 const [use_data,setData]=useState({
-    store_name:"",
-    
-   
+store_name:"",  
 });
-
 const{store_name}=use_data;
 const onInputChange=e=>{
 setData({...use_data,[e.target.name]:e.target.value})
@@ -41,6 +43,7 @@ setData({...use_data,[e.target.name]:e.target.value})
 			  } 
 				).then(result => { 
                     setVndrs(result.data.data);
+					setFilt_Vndrs(result.data.data)
 					
 				})
 				.catch(error =>{
@@ -108,7 +111,48 @@ setData({...use_data,[e.target.name]:e.target.value})
 				 }
 				
 				};
+
+
 	
+
+const [search,setSearch]=useState("")
+const columns=[
+{
+		name:"Logo",
+		selector:(row)=><img height={50} width={50} src={row.logo_img}/>
+},
+{
+	name:"Store Name",
+	selector:(row)=>row.store_name,
+	sortable:true,
+},
+{
+	name:"Status",
+	selector:(row)=>row.status,
+	sortable:true,
+},
+{
+	name:"Markt Place Status",
+	selector:(row)=>row.m_p_s,
+	sortable:true,
+},
+{
+	name:"Action",
+	cell:(row)=><Link to={'/vendor_order_list?user_id='+row.user_id}><i class="fa fa-eye" aria-hidden="true"></i></Link>
+}
+]
+useEffect(()=>{
+	
+	const result=vndrs.filter((vendor)=>{
+    return vendor.store_name.toLowerCase().match(search.toLowerCase());
+
+	});
+
+    setFilt_Vndrs(result);
+	},[search] );
+
+
+
 
 
 return(
@@ -148,7 +192,7 @@ return(
      {/* begin::Products */}
 		<div className="card card-flush">								
 		  <div className="card-header align-items-center py-5 gap-2 gap-md-5">
-		  <form onSubmit={e =>onSubmit(e)}>
+		  {/* <form onSubmit={e =>onSubmit(e)}>
                    <div className="row">
                     <div className="col-md-6">
                      <label><b>Store Name</b> <span>*</span></label>
@@ -165,14 +209,23 @@ return(
                     </div>
 
                     </div>  
-              </form>
+         </form> */}
          
         									
 				</div>
 									
 									<div className="card-body pt-0">
+										<DataTable 
+										columns={columns} 
+										data={filt_vndrs} 
+										pagination
+										subHeader
+										subHeaderComponent={
+											<input type="text" placeholder="Search" className="w-25 form-control" value={search} onChange={(e)=> setSearch(e.target.value)}/>
+										}
+										/>
 									
-									<table className="table align-middle table-row-dashed fs-6 gy-5">					
+									{/* <table className="table align-middle table-row-dashed fs-6 gy-5">					
 											<thead>
 												<tr className="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">		
                                                 <th>Sr No</th>
@@ -181,7 +234,7 @@ return(
                                                 <th>Status</th>
                                                 <th>Markt Place Status</th>
                                                 <th>Status</th>
-                                                {/* <th>Action</th> */}
+                                                <th>Action</th>
 												</tr>	
 											</thead>
 											
@@ -213,8 +266,7 @@ return(
 													</td>
 	
 													<td>  
-                                                        {/* <Link to={'/vendor_order_list?user_id='+item.user_id}><i class="fa fa-eye" aria-hidden="true"></i> </Link> */}
-
+                                                      
 														<Link to={'/vendor_order_list?user_id='+item.user_id+"/"+item.store_name}><i class="fa fa-eye" aria-hidden="true"></i></Link>
                                                            
                                                      </td>
@@ -224,7 +276,7 @@ return(
 															
 											</tbody>
 												
-										</table>
+										</table> */}
 
 									</div>
 									

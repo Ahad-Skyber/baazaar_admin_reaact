@@ -10,19 +10,26 @@ import Footer from './Footer';
 import Scrolltop from './Scrolltop';
 // import ReactToExcel from 'react-html-table-to-excel';
 
-//Bootstrap and jQuery libraries
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import 'jquery/dist/jquery.min.js';
-//Datatable Modules
-import "datatables.net-dt/js/dataTables.dataTables"
-import "datatables.net-dt/css/jquery.dataTables.min.css"
-import "datatables.net-buttons/js/dataTables.buttons.js"
-import "datatables.net-buttons/js/buttons.colVis.js"
-import "datatables.net-buttons/js/buttons.flash.js"
-import "datatables.net-buttons/js/buttons.html5.js"
-import "datatables.net-buttons/js/buttons.print.js"
-import "datatables.net-dt/css/jquery.dataTables.min.css"
-import $ from 'jquery'; 
+// //Bootstrap and jQuery libraries
+// // import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'jquery/dist/jquery.min.js';
+// //Datatable Modules
+// import "datatables.net-dt/js/dataTables.dataTables"
+// import "datatables.net-dt/css/jquery.dataTables.min.css"
+// import "datatables.net-buttons/js/dataTables.buttons.js"
+// import "datatables.net-buttons/js/buttons.colVis.js"
+// import "datatables.net-buttons/js/buttons.flash.js"
+// import "datatables.net-buttons/js/buttons.html5.js"
+// import "datatables.net-buttons/js/buttons.print.js"
+// import "datatables.net-dt/css/jquery.dataTables.min.css"
+ import $ from 'jquery'; 
+
+
+
+
+
+
+
 
 
 
@@ -93,30 +100,43 @@ const [mgs,setMsg]=useState(null)
 				
 
  //initialize datatable
-$(document).ready(function () {
-setTimeout(function(){
+// $(document).ready(function () {
+// setTimeout(function(){
 	
-	if (! $.fn.dataTable.isDataTable( '#unit_list' ) ) {
-		$('#unit_list').DataTable(
-		{
-			  pagingType: 'full_numbers',
-			  pageLength: 10,
-			  processing: true,
-			  dom: 'Bfrtip',
-				  buttons: ['csv', 'print'
-				  ]
-		}
-	);
+// 	if (! $.fn.dataTable.isDataTable( '#unit_list' ) ) {
+// 		$('#unit_list').DataTable(
+// 		{
+// 			  pagingType: 'full_numbers',
+// 			  pageLength: 10,
+// 			  processing: true,
+// 			  dom: 'Bfrtip',
+// 				  buttons: ['csv', 'print'
+// 				  ]
+// 		}
+// 	);
 
-	}
-	} ,
-	1000
-	);
-});
+// 	}
+// 	} ,
+// 	1000
+// 	);
+// });
+
+//exporte les données sélectionnées
+var $table = $('#table');
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+          $table.bootstrapTable('refreshOptions', {
+                exportDataType: $(this).val()
+            });
+        });
+    })
+
+		var trBoldBlue = $("table");
 
 
-
-
+	$(trBoldBlue).on("click", "tr", function (){
+			$(this).toggleClass("bold-blue");
+	});
 
 return(
 <>
@@ -237,7 +257,6 @@ return(
 												
 										</table> 
                                      
-											
 									</div>
 									
 		</div>
